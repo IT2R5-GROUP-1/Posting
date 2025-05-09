@@ -18,3 +18,6 @@ $router->delete('/posts/{id}', 'PostController@delete');
 $router->post('/posts/{postId}/comments', 'CommentController@comment');        // Add a comment to a post
 $router->post('/comments/{commentId}/replies', 'CommentController@reply');     // Reply to a comment
 $router->get('/post/{id}', 'PostController@getById');
+
+
+$router->get('/search', 'PostController@search');

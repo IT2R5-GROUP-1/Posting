@@ -54,4 +54,22 @@ class PostController extends BaseController
 
         return response()->json(['message' => 'Post deleted successfully.']);
     }
+
+    public function search(Request $request)
+{
+    // Get the search term from the query parameters
+    $searchTerm = $request->get('q');
+    
+    // Search in 'title' and 'content' columns
+    $posts = Post::where('title', 'LIKE', '%' . $searchTerm . '%')
+                 ->orWhere('content', 'LIKE', '%' . $searchTerm . '%')
+                 ->get();
+
+    if ($posts->isEmpty()) {
+        return response()->json(['message' => 'No posts found.'], 404);
+    }
+
+    return response()->json($posts);
+}
+
 }
