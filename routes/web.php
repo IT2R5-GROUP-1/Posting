@@ -11,6 +11,8 @@ $router->get('/', function () use ($router) {
 $router->post('/posts', 'PostController@create');           // Create a post
 $router->get('/posts/search', 'PostController@search');     // Search posts
 $router->get('/posts', 'PostController@getAll');
+$router->delete('/posts/{id}', 'PostController@delete');
+
 
 // COMMENT ROUTES (handled by CommentController)
 $router->post('/posts/{postId}/comments', 'CommentController@comment');        // Add a comment to a post
