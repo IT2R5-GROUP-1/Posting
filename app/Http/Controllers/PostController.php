@@ -9,24 +9,26 @@ use Laravel\Lumen\Routing\Controller as BaseController;
 class PostController extends BaseController
 {
     // Create a new post
-    public function create(Request $request)
-    {
-        // Validate incoming request
-        $this->validate($request, [
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
-        ]);
+public function create(Request $request)
+{
+    // Validate incoming request
+    $this->validate($request, [
+        'title' => 'required|string|max:255',
+        'content' => 'required|string',
+        'username' => 'nullable|string|max:255', // ← accept username from frontend
+    ]);
 
-        // Create new post
-        $post = Post::create([
-            'username' => 'User_' . substr(md5(rand()), 0, 9),
-            'title' => $request->title,
-            'content' => $request->content,
-        ]);
+    // Create new post
+    $post = Post::create([
+        'username' => $request->username,
+        'title' => $request->title,
+        'content' => $request->content,
+    ]);
 
-        // Return the created post as JSON
-        return response()->json($post, 201);
-    }
+    // Return the created post as JSON
+    return response()->json($post, 201);
+}
+
 
     // Get all posts
     public function getAll()
@@ -71,5 +73,25 @@ class PostController extends BaseController
 
     return response()->json($posts);
 }
+
+public function getPost($id)
+    {
+        $post = Post::with('comments')->findOrFail($id);
+
+        // Count comments including replies
+        $commentCount = Comment::where('post_id', $id)
+            ->count(); // Count top-level comments
+
+        $replyCount = Comment::where('parent_id', '!=', null) // Count replies
+            ->whereIn('post_id', $post->comments->pluck('post_id'))
+            ->count();
+
+        $totalComments = $commentCount + $replyCount;
+
+        return response()->json([
+            'post' => $post,
+            'comment_count' => $totalComments, // Add the total comment count
+        ]);
+    }
 
 }
