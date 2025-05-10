@@ -29,6 +29,14 @@ $app->withEloquent();
 
 $app->configure('database');
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Origin, Content-Type, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit(0);
+}
+
 
 /*
 |--------------------------------------------------------------------------

@@ -21,3 +21,7 @@ $router->get('/post/{id}', 'PostController@getById');
 
 
 $router->get('/search', 'PostController@search');
+
+$router->options('{any:.*}', function () {
+    return response('', 204);
+});
