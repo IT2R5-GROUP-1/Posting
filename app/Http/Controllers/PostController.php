@@ -82,7 +82,7 @@ public function getPost($id)
         $commentCount = Comment::where('post_id', $id)
             ->count(); // Count top-level comments
 
-        $replyCount = Comment::where('parent_id', '!=', null) // Count replies
+        $replyCount = Comment::where('parent_id', '!=', null) 
             ->whereIn('post_id', $post->comments->pluck('post_id'))
             ->count();
 
@@ -90,7 +90,7 @@ public function getPost($id)
 
         return response()->json([
             'post' => $post,
-            'comment_count' => $totalComments, // Add the total comment count
+            'comment_count' => $totalComments, 
         ]);
     }
 
